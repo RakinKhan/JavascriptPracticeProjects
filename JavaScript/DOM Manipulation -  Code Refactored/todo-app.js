@@ -6,6 +6,8 @@ let filter = {
     hideCompleted: false
 }
 
+//4/25/2019 This function filters the list of tasks by either the name of the task (as the user types in the filter input box)
+//or clicked checkbox (will filter out tasks that are completed) or both.
 let filterFunction = function (todos, filter) {
     let match = todos.filter(function (todo) {
         let searchText = todo.title.toLowerCase().includes(filter.searchText.toLowerCase())
@@ -16,19 +18,26 @@ let filterFunction = function (todos, filter) {
 
     //4/25/2019 totalNumber calls the totalNumberFilterDOM function and passes "match" variable for its argument
     let totalNumber = totalNumberFilterDOM(match)
-
+    
+    //4/25/2019 this will clear the elements in the <div id="filtered"></div> first before rerendering new elements with the
+    //filtered data.
     document.querySelector('#filtered').innerHTML = ''
 
-    //4/25/2019 totalTasksLeft calls the totalTasksLeftDOM function and passes the "totalNumber" variable arguement
+    //4/25/2019 totalTasksLeft calls the totalTasksLeftDOM function and passes the "totalNumber" variable arguement. The return
+    //value will create a new element with the filtered number of tasks to complete.
     const totalTasksLeft = totalTasksLeftDOM(totalNumber)
     document.querySelector('#filtered').appendChild(totalTasksLeft)
 
+    //4/25/2019 this loop function wil create a new element for each item in the filtered list.
     match.forEach(function (task) {
         let matchFilter = taskListDOM(task)
         document.querySelector('#filtered').appendChild(matchFilter)
     })
 }
 
+
+//4/25/2019 This function generates the unfiltered number of tasks that have yet to be completed and includes that number
+//in the element.
 let totalTodoLeft = function (todos) {
 
     //4/25/2019 totalNumber calls the totalNumberFilterDOM function and passes "todos" variable for its argument
@@ -38,6 +47,7 @@ let totalTodoLeft = function (todos) {
     document.querySelector('#filtered').appendChild(totalTasksLeft)
 }
 
+//4/25/2019 This function creates an element for each task in the "todos" variable.
 let fullList = function (todos) {
     todos.forEach(function (task) {
         const tasks = taskListDOM(task)
@@ -45,24 +55,24 @@ let fullList = function (todos) {
     })
 }
 
+//4/25/2019 This is for the filter input that will update rerender the list automatically as the user types.
 document.querySelector('#search-text').addEventListener('input', function (e) {
     filter.searchText = e.target.value
     filterFunction(todos, filter)
 })
 
 //this function lets you add a new task to the todos array of objects. 
-//UPDATE 4/24/2019: this function will also stringify the todos array and restringify the todos key with each addition of a task. Also, if a person submitted an empty
-//title, this function will recognize it and change the title of the nex task to `Unnamed Task`
-
 let addToDo = function (newToDo) {
 
     //4/25/2019 newTask calls the newTaskDOM function with the "newToDo" arguement
     let newTask = newTaskDOM(newToDo)
+    //4//25/2019 once the value for the "newTask" variable is returned the value will be pushed to the end of the "todos" array 
+    //and local storage will be updated with the new value
     return todos.push(newTask) && localStorage.setItem('todos', JSON.stringify(todos))
 }
 
-// this takes the input from the browser form and and runs the argument through the addToDo function, then rerenders the list on the browser.
-
+// this takes the input from the browser form and and runs the argument through the addToDo function, 
+//then rerenders the list on the browser.
 document.querySelector('#name-form').addEventListener('submit', function (e) {
     e.preventDefault()
     addToDo(e.target.elements.toDo.value)
@@ -71,7 +81,8 @@ document.querySelector('#name-form').addEventListener('submit', function (e) {
     
 })
 
-//when you click the checkbox next to "Hide Completed", this will hide all the tasks that have a todos.completed: true, then rerender the list.
+//when you click the checkbox next to "Hide Completed", this will hide all the tasks that have a todos.completed: true, 
+//then rerender the list.
 
 document.querySelector('#hide-completed').addEventListener('change', function (e) {
     filter.hideCompleted = e.target.checked
