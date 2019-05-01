@@ -52,6 +52,7 @@ let taskListDOM = function (task) {
     
     button.textContent = `x`
     button.addEventListener('click', function () {
+        //4/30/2019 when the button is clicked the removeTask() function is called with the tasks id value.
         removeTask(task.id)
         filterFunction(todos, filter)
     })
@@ -66,14 +67,16 @@ let taskListDOM = function (task) {
     return taskHTML
 }
 
-//4/30/2019
+//4/30/2019 This function removes the task that is next to the button that is clicked.
 let removeTask = function (id) {
-    let removeNoteIndex = todos.findIndex(function (todo) {
+    //4/30/2019 this function seaches for the index whos todo.id matches the argument sent through the removeTask() call from
+    //the above function.
+    let removeTaskIndex = todos.findIndex(function (todo) {
         return todo.id === id
     })
-
-    if (removeNoteIndex > -1) {
-        todos.splice(removeNoteIndex, 1)
+    //4/30/2019 once the index number is found, the if statement will remove the item with the respective task number
+    if (removeTaskIndex > -1) {
+        todos.splice(removeTaskIndex, 1)
     }
 
 }
@@ -92,6 +95,7 @@ let totalTasksLeftDOM = function (totalNumber) {
 //as the task name). If the user does not provide a task name then the title value is set automatically as `Unnamed Task`. The 
 //completion status of each new task is automatically set to boolean false. Each added task will change the total number of tasks that
 //have yet to completed, filtered or unfiltered.
+//4/30/2019 An "id" property was added to the object whos value is a the return value of a function from a third party library.
 let newTaskDOM = function (newToDo) {
     let newTask = {
         //4/30/2019 id uses a third party library to generate a random id for each task that is added
@@ -106,4 +110,3 @@ let newTaskDOM = function (newToDo) {
     return newTask
 
 }
-
